@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/codegangsta/cli"
 	"os"
+	"github.com/codegangsta/cli"
 )
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "fileconsul"
+	app.Name = "photolog"
 	app.Version = Version
-	app.Usage = "Sharing files in a consul cluster."
+	app.Usage = "Cli tools for creating/showing photo catalog"
 	app.Author = "foostan"
 	app.Email = "ks@fstn.jp"
 	app.Commands = Commands
