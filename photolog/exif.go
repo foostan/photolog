@@ -19,8 +19,7 @@ func Get(fname string) ([]string, error) {
 		return nil, err
 	}
 
-	props := [1]string{x.String()}
+	props := []string{x.String()}
 
 	return props, nil
-
 }

@@ -1,4 +1,4 @@
-package main
+package photolog
 
 import (
 	"fmt"
@@ -6,36 +6,38 @@ import (
 	"path/filepath"
 )
 
-func DirExec(path string) ([]string, error) {
-	list := make([]string, 0)
+type Executor interface {
+	Run(file_path string) error
+}
 
+func DirExec(path string, executor Executor) error {
 	f, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("Error reading '%s': %s", path, err)
+		return fmt.Errorf("Error reading '%s': %s", path, err)
 	}
 	defer f.Close()
 
 	fi, err := f.Stat()
 	if err != nil {
-		return nil, fmt.Errorf("Error reading '%s': %s", path, err)
+		return fmt.Errorf("Error reading '%s': %s", path, err)
 	}
 
 	if fi.IsDir() {
 		contents, err := f.Readdir(-1)
 		if err != nil {
-			return nil, fmt.Errorf("Error reading '%s': %s", path, err)
+			return fmt.Errorf("Error reading '%s': %s", path, err)
 		}
 
 		for _, fi := range contents {
 			subpath := filepath.Join(path, fi.Name())
-			list, err = DirExec(subpath)
+			err = DirExec(subpath, executor)
 			if err != nil {
-				return nil, err
+				return err
 			}
 		}
 	} else {
-		fmt.Println(path)
+		executor.Run(path)
 	}
 
-	return list, nil
+	return nil
 }
