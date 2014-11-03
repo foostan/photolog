@@ -1,15 +1,16 @@
 package photolog
 
 import (
-	"fmt"
 	"testing"
+	log "github.com/Sirupsen/logrus"
 )
 
 type TestExecutor struct {
 }
 
 func (e *TestExecutor) Run(file_path string) error {
-	fmt.Println(file_path)
+	log.SetLevel(log.ErrorLevel)
+	log.Info(file_path)
 
 	return nil
 }
