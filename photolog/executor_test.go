@@ -17,11 +17,9 @@ func (e *TestExecutor) Run(file_path string) error {
 }
 
 func TestDirExec(t *testing.T) {
-	testExecuter := &TestExecutor{
+	err := DirExec("../test/resources/photos", &TestExecutor{
 		logger: log.New(),
-	}
-
-	err := DirExec("../test/resources/photos", testExecuter)
+	})
 	if err != nil {
 		t.Errorf("err: %v", err)
 	}
