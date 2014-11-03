@@ -1,12 +1,11 @@
 package photolog
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 type TestExecutor struct {
-
 }
 
 func (e *TestExecutor) Run(file_path string) error {

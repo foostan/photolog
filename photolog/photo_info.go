@@ -114,15 +114,15 @@ func Read(fname string) (*PhotoInfo, error) {
 func (pi *PhotoInfo) CameraName() string {
 	names := make([]string, 0)
 
-	if(pi.Make != "") {
+	if pi.Make != "" {
 		names = append(names, pi.Make)
 	}
 
-	if(pi.Model != "") {
+	if pi.Model != "" {
 		names = append(names, pi.Model)
 	}
 
-	if(pi.Software != "") {
+	if pi.Software != "" {
 		names = append(names, pi.Software)
 	}
 
