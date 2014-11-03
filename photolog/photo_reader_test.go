@@ -7,6 +7,7 @@ import (
 
 func TestRead(t *testing.T) {
 	logger := log.New()
+	logger.Level = log.ErrorLevel
 
 	r := PhotoReader{
 		logger: logger,
