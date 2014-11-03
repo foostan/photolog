@@ -19,7 +19,7 @@ type PhotoInfo struct {
 }
 
 func DefaultPhotoInfo() (*PhotoInfo, error) {
-	defaultTime, err := time.Parse("2006", "2014")
+	defaultTime, err := time.Parse("2006", "0001")
 	if err != nil {
 		return nil, err
 	}
