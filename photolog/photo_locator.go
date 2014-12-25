@@ -1,28 +1,45 @@
 package photolog
 
 import (
+	"fmt"
 	log "github.com/Sirupsen/logrus"
+	"strings"
 )
 
 type PhotoLocator struct {
-	base_path string
-	logger *log.Logger
+	basePath string
+	logger   *log.Logger
 }
 
-func (e *PhotoLocator) Run(file_path string) error {
+func (e *PhotoLocator) Run(filePath string) error {
 	reader := PhotoReader{
 		logger: e.logger,
 	}
 
-	pi, err := reader.Read(file_path)
+	pi, err := reader.Read(filePath)
 	if err != nil {
 		return err
 	}
 
-	e.logger.Warn("base_path: ",e.base_path)
-	e.logger.Warn("read: ",file_path)
-	e.logger.Info(pi)
+	location, err := e.getLocation(pi)
+	if err != nil {
+		return err
+	}
+
+	e.logger.Warn(pi)
+	e.logger.Warn(location)
 
 	return nil
 }
 
+func (e *PhotoLocator) getLocation(pi *PhotoInfo) (string, error) {
+	year := fmt.Sprintf("%04d", pi.DateTime.Year())
+	month := fmt.Sprintf("%02d", pi.DateTime.Month())
+	day := fmt.Sprintf("%02d", pi.DateTime.Day())
+	name, err := pi.FileName()
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Join([]string{e.basePath, year, month, day, name}, "/"), nil
+}
