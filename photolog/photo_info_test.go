@@ -13,4 +13,10 @@ func TestCameraName(t *testing.T) {
 	pi.Make = "Make"
 	pi.Model = "Model"
 	pi.Software = "Software"
+	acCN := pi.CameraName()
+	exCN := "Make Model Software"
+
+	if acCN != exCN {
+		t.Fatalf("expected result is %s, but %s", acCN, exCN)
+	}
 }
