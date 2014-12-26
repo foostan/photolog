@@ -4,6 +4,7 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"strings"
+	"os"
 )
 
 type PhotoLocator struct {
@@ -26,8 +27,10 @@ func (e *PhotoLocator) Run(filePath string) error {
 		return err
 	}
 
-	e.logger.Warn(pi)
-	e.logger.Warn(location)
+	err = os.Rename(filePath, location)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
