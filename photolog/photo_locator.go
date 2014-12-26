@@ -8,13 +8,13 @@ import (
 )
 
 type PhotoLocator struct {
-	basePath string
-	logger   *log.Logger
+	BasePath string
+	Logger   *log.Logger
 }
 
 func (e *PhotoLocator) Run(filePath string) error {
 	reader := PhotoReader{
-		logger: e.logger,
+		Logger: e.Logger,
 	}
 
 	pi, err := reader.Read(filePath)
@@ -44,5 +44,5 @@ func (e *PhotoLocator) getLocation(pi *PhotoInfo) (string, error) {
 		return "", err
 	}
 
-	return strings.Join([]string{e.basePath, year, month, day, name}, "/"), nil
+	return strings.Join([]string{e.BasePath, year, month, day, name}, "/"), nil
 }

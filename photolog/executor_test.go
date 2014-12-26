@@ -6,7 +6,7 @@ import (
 )
 
 type TestExecutor struct {
-	logger *log.Logger
+	Logger *log.Logger
 }
 
 func (e *TestExecutor) Run(file_path string) error {
@@ -18,7 +18,7 @@ func (e *TestExecutor) Run(file_path string) error {
 
 func TestDirExec(t *testing.T) {
 	err := DirExec("../test/resources/photos", &TestExecutor{
-		logger: log.New(),
+		Logger: log.New(),
 	})
 	if err != nil {
 		t.Errorf("err: %v", err)

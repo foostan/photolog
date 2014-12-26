@@ -11,7 +11,7 @@ import (
 )
 
 type PhotoReader struct {
-	logger *logrus.Logger
+	Logger *logrus.Logger
 }
 
 func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
@@ -37,28 +37,28 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 	if err == nil && make != nil {
 		pi.Make = string(make.Val)
 	} else {
-		r.logger.Info("missing infomation of a maker")
+		r.Logger.Info("missing infomation of a maker")
 	}
 
 	model, err := readExif.Get("Model")
 	if err == nil && model != nil {
 		pi.Model = string(model.Val)
 	} else {
-		r.logger.Info("missing infomation of a model")
+		r.Logger.Info("missing infomation of a model")
 	}
 
 	software, err := readExif.Get("Software")
 	if err == nil && software != nil {
 		pi.Software = string(software.Val)
 	} else {
-		r.logger.Info("missing infomation of a software")
+		r.Logger.Info("missing infomation of a software")
 	}
 
 	dateTime, err := readExif.DateTime()
 	if err == nil {
 		pi.DateTime = dateTime
 	} else {
-		r.logger.Info("missing information of a date time")
+		r.Logger.Info("missing information of a date time")
 
 		gpsDateStamp, err := readExif.Get("GPSDateStamp")
 		if err == nil && gpsDateStamp != nil {
@@ -68,7 +68,7 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 			}
 			pi.DateTime = dateTime
 		} else {
-			r.logger.Warn("missing infomation of a GPSDateSamp")
+			r.Logger.Warn("missing infomation of a GPSDateSamp")
 		}
 	}
 
@@ -79,7 +79,7 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 			Long: long,
 		}
 	} else {
-		r.logger.Info("missing information of GPS Lat and Long")
+		r.Logger.Info("missing information of GPS Lat and Long")
 	}
 
 	return pi, nil

@@ -2,7 +2,10 @@ package command
 
 import (
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+
+	. "github.com/foostan/photolog/photolog"
 )
 
 var RelocateFlags = []cli.Flag{
@@ -14,7 +17,13 @@ var RelocateFlags = []cli.Flag{
 }
 
 func RelocateCommand(c *cli.Context) {
-	basepath := c.String("basepath")
+	basePath := c.String("basepath")
 
-	fmt.Println(basepath)
+	err := DirExec(basePath, &PhotoLocator{
+		BasePath: basePath,
+		Logger: log.New(),
+	})
+	if err != nil {
+		fmt.Errorf("err: %v", err)
+	}
 }
