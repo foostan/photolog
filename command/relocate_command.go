@@ -14,14 +14,28 @@ var RelocateFlags = []cli.Flag{
 		Value: ".",
 		Usage: "base directory path of target files",
 	},
+	cli.StringFlag{
+		Name:  "log-level",
+		Value: "warn",
+		Usage: "logger level",
+	},
 }
 
 func RelocateCommand(c *cli.Context) {
-	basePath := c.String("basepath")
+	// setup logger
+	logLvStr := c.String("log-level")
+	logLevel, err := log.ParseLevel(logLvStr)
+	if err != nil {
+		fmt.Errorf("err: %v", err)
+	}
+	logger := log.New()
+	logger.Level = logLevel
 
-	err := DirExec(basePath, &PhotoLocator{
+	// run command
+	basePath := c.String("basepath")
+	err = DirExec(basePath, &PhotoLocator{
 		BasePath: basePath,
-		Logger: log.New(),
+		Logger: logger,
 	})
 	if err != nil {
 		fmt.Errorf("err: %v", err)
