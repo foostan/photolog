@@ -3,11 +3,10 @@ package photolog
 import (
 	"strings"
 	"time"
-	"crypto/md5"
 	"encoding/json"
-	"io"
 	"fmt"
 	"strconv"
+	"hash/fnv"
 )
 
 type GPS struct {
@@ -55,9 +54,9 @@ func (pi *PhotoInfo) FileName() (string, error) {
 
 	timeStr := strconv.FormatInt(pi.DateTime.Unix(), 10)
 
-	h := md5.New()
-	io.WriteString(h, string(json))
-	nameHashStr := fmt.Sprintf("%x", h.Sum(nil))
+	h := fnv.New32a()
+	h.Write([]byte(json))
+	nameHashStr := fmt.Sprintf("%d", h.Sum32())
 
 	return timeStr+nameHashStr+pi.FileExt, nil
 }

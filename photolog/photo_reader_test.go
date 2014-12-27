@@ -13,7 +13,7 @@ func TestRead(t *testing.T) {
 		Logger: logger,
 	}
 
-	_, err := r.Read("../test/resources/photos/2014/07/19/14057280006d69d2f804acdaf59f2a7d51b9eaba0f.jpg")
+	_, err := r.Read("../test/resources/photos/2014/07/19/14057280003812191413.jpg")
 	if err != nil {
 		t.Errorf("err: %v", err)
 	}
@@ -21,12 +21,12 @@ func TestRead(t *testing.T) {
 		t.Errorf("err: %v", err)
 	}
 
-	_, err = r.Read("../test/resources/photos/2013/11/06/13837499064ce0c4fe2c204de959707e0f877d38f8.jpg")
+	_, err = r.Read("../test/resources/photos/2013/11/06/13837499061493942213.jpg")
 	if err != nil {
 		t.Errorf("err: %v", err)
 	}
 
-	_, err = r.Read("../test/resources/photos/2013/11/23/1385184102d37d22df6fd6294094f752313b88e362.jpg")
+	_, err = r.Read("../test/resources/photos/2013/11/23/13851841024249406430.jpg")
 	if err != nil {
 		t.Errorf("err: %v", err)
 	}
