@@ -9,8 +9,8 @@ import (
 var Commands = []cli.Command{
 	cli.Command{
 		Name:        "relocate",
-		Usage:       "Relocate photos by taked date",
-		Description: "Relocate photos by taked date",
+		Usage:       "Relocate photos",
+		Description: "Relocate photos by datetime and rename to the hash of photo information",
 		Flags:       command.RelocateFlags,
 		Action:      command.RelocateCommand,
 	},

@@ -9,7 +9,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "photolog"
 	app.Version = Version
-	app.Usage = "Cli tools for creating/showing photo catalog"
+	app.Usage = "Tools for managing photos"
 	app.Author = "foostan"
 	app.Email = "ks@fstn.jp"
 	app.Commands = Commands
