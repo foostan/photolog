@@ -5,6 +5,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"strings"
 	"os"
+	"path/filepath"
 )
 
 type PhotoLocator struct {
@@ -12,15 +13,18 @@ type PhotoLocator struct {
 	Logger   *log.Logger
 }
 
-func (e *PhotoLocator) Run(filepath string) error {
-	e.Logger.Info("read " + filepath)
+func (e *PhotoLocator) Run(path string) error {
+	e.Logger.Info("read " + path)
 	reader := PhotoReader{
 		Logger: e.Logger,
 	}
 
-	pi, err := reader.Read(filepath)
+	pi, err := reader.Read(path)
 	if err != nil {
 		return err
+	}
+	if pi == nil {
+		return nil
 	}
 
 	location, err := e.getLocation(pi)
@@ -28,9 +32,15 @@ func (e *PhotoLocator) Run(filepath string) error {
 		return err
 	}
 
-	if filepath != location {
-		e.Logger.Info("rename to " + location)
-		err = os.Rename(filepath, location)
+	if path != location {
+		e.Logger.Info("Rename to " + location)
+
+		err = os.MkdirAll(filepath.Dir(location), os.FileMode(0755))
+		if err != nil {
+			return fmt.Errorf("Create directories of '%s' : %s", location, err)
+		}
+
+		err = os.Rename(path, location)
 		if err != nil {
 			return err
 		}
