@@ -21,6 +21,7 @@ type PhotoInfo struct {
 	Software string
 	DateTime time.Time
 	GPS      GPS
+	FileSize int64
 	FileExt  string
 }
 
@@ -39,6 +40,7 @@ func DefaultPhotoInfo() (*PhotoInfo, error) {
 			Lat:  0,
 			Long: 0,
 		},
+		FileSize:  0,
 		FileExt:   "",
 	}
 

@@ -20,6 +20,11 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 		return nil, err
 	}
 
+	fi, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+
 	exif.RegisterParsers(mknote.All...)
 	readExif, err := exif.Decode(f)
 	if err != nil {
@@ -31,6 +36,7 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 		return nil, err
 	}
 
+	pi.FileSize = fi.Size()
 	pi.FileExt = strings.ToLower(filepath.Ext(f.Name()))
 
 	make, err := readExif.Get("Make")
