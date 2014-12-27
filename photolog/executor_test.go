@@ -10,8 +10,8 @@ type TestExecutor struct {
 }
 
 func (e *TestExecutor) Run(file_path string) error {
-	e.logger.Level = log.ErrorLevel
-	e.logger.Info(file_path)
+	e.Logger.Level = log.ErrorLevel
+	e.Logger.Info(file_path)
 
 	return nil
 }

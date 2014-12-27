@@ -3,8 +3,8 @@ package photolog
 import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	"strings"
 	"os"
+	"strings"
 )
 
 type PhotoLocator struct {
@@ -13,6 +13,7 @@ type PhotoLocator struct {
 }
 
 func (e *PhotoLocator) Run(filePath string) error {
+	e.Logger.Info("read " + filePath)
 	reader := PhotoReader{
 		Logger: e.Logger,
 	}
@@ -27,9 +28,12 @@ func (e *PhotoLocator) Run(filePath string) error {
 		return err
 	}
 
-	err = os.Rename(filePath, location)
-	if err != nil {
-		return err
+	if filePath != location {
+		e.Logger.Info("rename to " + location)
+		err = os.Rename(filePath, location)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

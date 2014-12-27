@@ -10,7 +10,7 @@ func TestRead(t *testing.T) {
 	logger.Level = log.ErrorLevel
 
 	r := PhotoReader{
-		logger: logger,
+		Logger: logger,
 	}
 
 	_, err := r.Read("../test/resources/photos/2014/07/19/1405728000b5d4582798f000c70a0e97454dd63f5d.jpg")
