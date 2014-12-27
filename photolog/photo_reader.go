@@ -14,8 +14,8 @@ type PhotoReader struct {
 	Logger *logrus.Logger
 }
 
-func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
-	f, err := os.Open(fname)
+func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
+	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (r PhotoReader) Read(fname string) (*PhotoInfo, error) {
 	exif.RegisterParsers(mknote.All...)
 	readExif, err := exif.Decode(f)
 	if err != nil {
-		r.Logger.Warnf("can't resolve as a image file: %s", fname)
+		r.Logger.Warnf("can't resolve as a image file: %s", path)
 		return nil, nil
 	}
 
