@@ -7,7 +7,7 @@ import (
 )
 
 type Executor interface {
-	Run(file_path string) error
+	Run(filepath string) error
 }
 
 func DirExec(path string, executor Executor) error {

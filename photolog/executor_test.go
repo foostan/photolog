@@ -9,9 +9,9 @@ type TestExecutor struct {
 	Logger *log.Logger
 }
 
-func (e *TestExecutor) Run(file_path string) error {
+func (e *TestExecutor) Run(filepath string) error {
 	e.Logger.Level = log.ErrorLevel
-	e.Logger.Info(file_path)
+	e.Logger.Info(filepath)
 
 	return nil
 }
