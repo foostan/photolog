@@ -13,19 +13,19 @@ type Executor interface {
 func DirExec(path string, executor Executor) error {
 	f, err := os.Open(path)
 	if err != nil {
-		return fmt.Errorf("Error reading '%s': %s", path, err)
+		return fmt.Errorf("Read '%s': %s", path, err)
 	}
 	defer f.Close()
 
 	fi, err := f.Stat()
 	if err != nil {
-		return fmt.Errorf("Error reading '%s': %s", path, err)
+		return fmt.Errorf("Read '%s': %s", path, err)
 	}
 
 	if fi.IsDir() {
 		contents, err := f.Readdir(-1)
 		if err != nil {
-			return fmt.Errorf("Error reading '%s': %s", path, err)
+			return fmt.Errorf("Read '%s': %s", path, err)
 		}
 
 		for _, fi := range contents {
@@ -36,7 +36,10 @@ func DirExec(path string, executor Executor) error {
 			}
 		}
 	} else {
-		executor.Run(path)
+		err := executor.Run(path)
+		if err != nil {
+			return fmt.Errorf("Run at '%s': %s", path, err)
+		}
 	}
 
 	return nil

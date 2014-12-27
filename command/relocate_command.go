@@ -38,6 +38,6 @@ func RelocateCommand(c *cli.Context) {
 		Logger: logger,
 	})
 	if err != nil {
-		fmt.Errorf("err: %v", err)
+		logger.Fatal(err)
 	}
 }
