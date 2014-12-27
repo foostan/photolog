@@ -56,7 +56,7 @@ func (pi *PhotoInfo) FileName() (string, error) {
 
 	h := fnv.New32a()
 	h.Write([]byte(json))
-	nameHashStr := fmt.Sprintf("%d", h.Sum32())
+	nameHashStr := fmt.Sprintf("%010d", h.Sum32())
 
 	return timeStr+nameHashStr+pi.FileExt, nil
 }
