@@ -19,6 +19,7 @@ func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
 
 	fi, err := f.Stat()
 	if err != nil {
