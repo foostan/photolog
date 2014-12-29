@@ -2,7 +2,6 @@ package photolog
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/nfnt/resize"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -11,6 +10,7 @@ import (
 	"github.com/nfnt/resize"
 	"path/filepath"
 	"fmt"
+	"strings"
 )
 
 type ThumSize struct {
@@ -32,29 +32,24 @@ func init() {
 }
 
 func (e *PhotoThumbnailer) Run(path string) error {
-	e.Logger.Info("read " + path)
+	thumPath := strings.Replace(path, e.BasePath, e.BaseThumPath, 1)
+	thumPathBase := filepath.Dir(thumPath)
 
-	f, err := os.Open(path)
+	err := os.MkdirAll(thumPathBase, os.FileMode(0755))
 	if err != nil {
-		return err
+		return fmt.Errorf("Create directories of '%s' : %s", thumPath, err)
 	}
-	defer f.Close()
-
-	fi, err := f.Stat()
-	if err != nil {
-		return err
-	}
-
-	img, _, err := image.Decode(f)
+	
+	originImg, originName, err := e.OriginImg(path)
 	if err != nil {
 		return err
 	}
 
 	for _, thumSize := range e.ThumSizes {
-		thumImg := resize.Resize(thumSize.Width, thumSize.Height, img, resize.Lanczos3)
+		thumImg := resize.Resize(thumSize.Width, thumSize.Height, originImg, resize.Lanczos3)
 
-		name := fmt.Sprintf("%d_%d_%s", thumSize.Width, thumSize.Height, fi.Name())
-		out, err := os.Create(filepath.Join(e.BaseThumPath, name))
+		thumNameWithSize := fmt.Sprintf("%d_%d_%s", thumSize.Width, thumSize.Height, originName)
+		out, err := os.Create(filepath.Join(thumPathBase, thumNameWithSize))
 		if err != nil {
 			return err
 		}
@@ -69,3 +64,22 @@ func (e *PhotoThumbnailer) Run(path string) error {
 	return nil
 }
 
+func (e *PhotoThumbnailer) OriginImg(path string) (image.Image, string, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, "", err
+	}
+	defer f.Close()
+
+	fi, err := f.Stat()
+	if err != nil {
+		return nil, "", err
+	}
+
+	img, _, err := image.Decode(f)
+	if err != nil {
+		return nil, "", err
+	}
+	
+	return img, fi.Name(), nil
+}
