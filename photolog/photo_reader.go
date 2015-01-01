@@ -43,21 +43,21 @@ func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
 
 	make, err := readExif.Get("Make")
 	if err == nil && make != nil {
-		pi.Make = string(make.Val)
+		pi.Make = strings.Trim(string(make.Val), "\u0000")
 	} else {
 		r.Logger.Debug("missing infomation of a maker")
 	}
 
 	model, err := readExif.Get("Model")
 	if err == nil && model != nil {
-		pi.Model = string(model.Val)
+		pi.Model = strings.Trim(string(model.Val), "\u0000")
 	} else {
 		r.Logger.Debug("missing infomation of a model")
 	}
 
 	software, err := readExif.Get("Software")
 	if err == nil && software != nil {
-		pi.Software = string(software.Val)
+		pi.Software = strings.Trim(string(software.Val), "\u0000")
 	} else {
 		r.Logger.Debug("missing infomation of a software")
 	}
