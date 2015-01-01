@@ -33,12 +33,6 @@ func RelocateCommand(c *cli.Context) {
 
 	// run command
 	basePath := c.String("basepath")
-	ps := NewPhotoStatistics(basePath, logger)
-	err = DirExec(basePath, ps)
-	if err != nil {
-		logger.Fatal(err)
-	}
-	
 	err = DirExec(basePath, &PhotoLocator{
 		BasePath: basePath,
 		Logger: logger,
