@@ -3,11 +3,10 @@ package photolog
 import (
 	"github.com/Sirupsen/logrus"
 	"github.com/rwcarlsen/goexif/exif"
-	"github.com/rwcarlsen/goexif/mknote"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
-	"path/filepath"
 )
 
 type PhotoReader struct {
@@ -15,6 +14,13 @@ type PhotoReader struct {
 }
 
 func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
+	defer func() {
+		err := recover()
+		if err != nil {
+			r.Logger.Errorf("can't resolve as a image file: %s, %s", path, err)
+		}
+	}()
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -26,7 +32,6 @@ func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
 		return nil, err
 	}
 
-	exif.RegisterParsers(mknote.All...)
 	readExif, err := exif.Decode(f)
 	if err != nil {
 		r.Logger.Warnf("can't resolve as a image file: %s", path)
