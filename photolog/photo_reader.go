@@ -21,6 +21,8 @@ func (r PhotoReader) Read(path string) (*PhotoInfo, error) {
 		}
 	}()
 
+	r.Logger.Info("read " + path)
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err

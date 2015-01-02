@@ -14,7 +14,6 @@ type PhotoLocator struct {
 }
 
 func (e *PhotoLocator) Run(path string) error {
-	e.Logger.Info("read " + path)
 	reader := PhotoReader{
 		Logger: e.Logger,
 	}
