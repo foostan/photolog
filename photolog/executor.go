@@ -28,10 +28,15 @@ func DirExec(path string, executor Executor) error {
 			return fmt.Errorf("Read '%s': %s", path, err)
 		}
 
+		errChan := make(chan error)
 		for _, fi := range contents {
 			subpath := filepath.Join(path, fi.Name())
-			err = DirExec(subpath, executor)
-			if err != nil {
+			go func(subpath string) {
+				errChan <- DirExec(subpath, executor)
+			}(subpath)
+		}
+		for i := 0; i < len(contents); i++ {
+			if <-errChan != nil {
 				return err
 			}
 		}
