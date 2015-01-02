@@ -6,18 +6,16 @@ import (
 )
 
 type Stats struct {
-	All      int64
-	Make     map[string]int64
-	Model    map[string]int64
-	Software map[string]int64
-	DateTime map[string]int64
-	FileSize int64
+	All        int64
+	CameraName map[string]int64
+	DateTime   map[string]int64
+	FileSize   int64
 }
 
 type PhotoStats struct {
-	BasePath   string
-	Logger     *log.Logger
-	Stats Stats
+	BasePath string
+	Logger   *log.Logger
+	Stats    Stats
 }
 
 func NewPhotoStats(basePath string, logger *log.Logger) *PhotoStats {
@@ -33,12 +31,10 @@ func NewPhotoStats(basePath string, logger *log.Logger) *PhotoStats {
 
 func (e *PhotoStats) Reset() {
 	e.Stats = Stats{
-		All:      0,
-		Make:     make(map[string]int64, 0),
-		Model:    make(map[string]int64, 0),
-		Software: make(map[string]int64, 0),
-		DateTime: make(map[string]int64, 0),
-		FileSize: 0,
+		All:        0,
+		CameraName: make(map[string]int64, 0),
+		DateTime:   make(map[string]int64, 0),
+		FileSize:   0,
 	}
 }
 
@@ -56,9 +52,7 @@ func (e *PhotoStats) Run(path string) error {
 	}
 
 	e.sumAll()
-	e.sumMake(pi)
-	e.sumModel(pi)
-	e.sumSoftware(pi)
+	e.sumCameraName(pi)
 	e.sumDateTime(pi)
 	e.sumFileSize(pi)
 
@@ -69,27 +63,13 @@ func (e *PhotoStats) sumAll() {
 	e.Stats.All++
 }
 
-func (e *PhotoStats) sumMake(pi *PhotoInfo) {
-	if _, ok := e.Stats.Make[pi.Make]; ok {
-		e.Stats.Make[pi.Make]++
-	} else {
-		e.Stats.Make[pi.Make] = 1
-	}
-}
+func (e *PhotoStats) sumCameraName(pi *PhotoInfo) {
+	name := pi.CameraName()
 
-func (e *PhotoStats) sumModel(pi *PhotoInfo) {
-	if _, ok := e.Stats.Model[pi.Model]; ok {
-		e.Stats.Model[pi.Model]++
+	if _, ok := e.Stats.CameraName[name]; ok {
+		e.Stats.CameraName[name]++
 	} else {
-		e.Stats.Model[pi.Model] = 1
-	}
-}
-
-func (e *PhotoStats) sumSoftware(pi *PhotoInfo) {
-	if _, ok := e.Stats.Software[pi.Software]; ok {
-		e.Stats.Software[pi.Software]++
-	} else {
-		e.Stats.Software[pi.Software] = 1
+		e.Stats.CameraName[name] = 1
 	}
 }
 
