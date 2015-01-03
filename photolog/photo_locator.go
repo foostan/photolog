@@ -3,14 +3,25 @@ package photolog
 import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
+	"io/ioutil"
 	"os"
 	"path/filepath"
-	"io/ioutil"
 )
 
 type PhotoLocator struct {
-	BasePath string
-	Logger   *log.Logger
+	SrcDir string
+	DstDir string
+	Logger *log.Logger
+}
+
+func NewPhotoLocator(srcDir string, dstDir string, logger *log.Logger) *PhotoLocator {
+	photoLocator := &PhotoLocator{
+		SrcDir: srcDir,
+		DstDir: dstDir,
+		Logger: logger,
+	}
+
+	return photoLocator
 }
 
 func (e *PhotoLocator) Run(path string) error {
@@ -62,7 +73,7 @@ func (e *PhotoLocator) getLocation(pi *PhotoInfo) (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(e.BasePath, year, month, day, name), nil
+	return filepath.Join(e.DstDir, year, month, day, name), nil
 }
 
 func removeAllEmpDir(path string) error {

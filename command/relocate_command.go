@@ -10,9 +10,14 @@ import (
 
 var RelocateFlags = []cli.Flag{
 	cli.StringFlag{
-		Name:  "basepath",
+		Name:  "src-dir",
 		Value: ".",
-		Usage: "base directory path of target files",
+		Usage: "base directory path of source files",
+	},
+	cli.StringFlag{
+		Name:  "dst-dir",
+		Value: ".",
+		Usage: "base directory path of destination files",
 	},
 	cli.StringFlag{
 		Name:  "log-level",
@@ -32,11 +37,9 @@ func RelocateCommand(c *cli.Context) {
 	logger.Level = logLevel
 
 	// run command
-	basePath := c.String("basepath")
-	err = DirExec(basePath, &PhotoLocator{
-		BasePath: basePath,
-		Logger: logger,
-	})
+	srcDir := c.String("src-dir")
+	dstDir := c.String("dst-dir")
+	err = DirExec(srcDir, NewPhotoLocator(srcDir, dstDir, logger))
 	if err != nil {
 		logger.Fatal(err)
 	}

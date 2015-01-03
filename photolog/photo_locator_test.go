@@ -8,11 +8,10 @@ import (
 func TestExplore(t *testing.T) {
 	logger := log.New()
 	logger.Level = log.ErrorLevel
+	srcDir := "../test/resources/photos"
+	dstDir := srcDir
 
-	err := DirExec("../test/resources/photos", &PhotoLocator{
-		BasePath: "../test/resources/photos",
-		Logger: logger,
-	})
+	err := DirExec(srcDir, NewPhotoLocator(srcDir, dstDir, logger))
 	if err != nil {
 		t.Errorf("err: %v", err)
 	}
