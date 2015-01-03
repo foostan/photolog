@@ -14,8 +14,8 @@ import (
 )
 
 type ThumSize struct {
-	Width  uint
-	Height uint
+	Name  string
+	Scale uint
 }
 
 type PhotoThumbnailer struct {
@@ -35,17 +35,21 @@ func NewPhotoThumbnailer(srcDir string, dstDir string, thumSizes []ThumSize, log
 	if len(thumSizes) == 0 {
 		thumSizes = []ThumSize{
 			ThumSize{
-				Width:  240,
-				Height: 0,
+				Name:  "s",
+				Scale: 240,
+			},
+			ThumSize{
+				Name:  "l",
+				Scale: 960,
 			},
 		}
 	}
 
 	pt := &PhotoThumbnailer{
-		SrcDir: srcDir,
-		DstDir: dstDir,
+		SrcDir:    srcDir,
+		DstDir:    dstDir,
 		ThumSizes: thumSizes,
-		Logger: logger,
+		Logger:    logger,
 	}
 
 	return pt
@@ -53,7 +57,7 @@ func NewPhotoThumbnailer(srcDir string, dstDir string, thumSizes []ThumSize, log
 
 func (e *PhotoThumbnailer) Run(originPath string) error {
 	e.Logger.Info("make thumbnail(s) of " + originPath)
-	
+
 	p := strings.Replace(originPath, e.SrcDir, e.DstDir, 1)
 	dstDirBase := filepath.Dir(p)
 
@@ -68,10 +72,16 @@ func (e *PhotoThumbnailer) Run(originPath string) error {
 	}
 
 	for _, thumSize := range e.ThumSizes {
-		thumImg := resize.Resize(thumSize.Width, thumSize.Height, originImg, resize.Lanczos3)
-		thumNameWithSize := fmt.Sprintf("%d_%d_%s", thumSize.Width, thumSize.Height, originName)
+		w := thumSize.Scale
+		h := uint(0)
+		if originImg.Bounds().Max.X < originImg.Bounds().Max.Y {
+			w = uint(0)
+			h = thumSize.Scale
+		}
+		thumImg := resize.Resize(w, h, originImg, resize.Lanczos3)
+		fileName := fmt.Sprintf("%s_%s", thumSize.Name, originName)
 
-		out, err := os.Create(filepath.Join(dstDirBase, thumNameWithSize))
+		out, err := os.Create(filepath.Join(dstDirBase, fileName))
 		if err != nil {
 			return err
 		}
