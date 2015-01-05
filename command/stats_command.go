@@ -11,9 +11,9 @@ import (
 
 var StatsFlags = []cli.Flag{
 	cli.StringFlag{
-		Name:  "basepath",
+		Name:  "src-dir",
 		Value: ".",
-		Usage: "base directory path of target files",
+		Usage: "base directory path of source files",
 	},
 	cli.StringFlag{
 		Name:  "log-level",
@@ -33,9 +33,9 @@ func StatsCommand(c *cli.Context) {
 	logger.Level = logLevel
 
 	// run command
-	basePath := c.String("basepath")
-	ps := NewPhotoStats(basePath, logger)
-	err = DirExec(basePath, ps)
+	srcDir := c.String("src-dir")
+	ps := NewPhotoStats(srcDir, logger)
+	err = DirExec(srcDir, ps)
 	if err != nil {
 		logger.Fatal(err)
 	}

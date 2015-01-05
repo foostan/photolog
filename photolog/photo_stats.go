@@ -13,15 +13,15 @@ type Stats struct {
 }
 
 type PhotoStats struct {
-	BasePath string
-	Logger   *log.Logger
-	Stats    Stats
+	SrcDir string
+	Logger *log.Logger
+	Stats  Stats
 }
 
-func NewPhotoStats(basePath string, logger *log.Logger) *PhotoStats {
+func NewPhotoStats(srcDir string, logger *log.Logger) *PhotoStats {
 	photoStats := &PhotoStats{
-		BasePath: basePath,
-		Logger:   logger,
+		SrcDir: srcDir,
+		Logger: logger,
 	}
 
 	photoStats.Reset()
