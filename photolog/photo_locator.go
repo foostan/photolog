@@ -11,13 +11,15 @@ import (
 type PhotoLocator struct {
 	SrcDir string
 	DstDir string
+	Mode   string
 	Logger *log.Logger
 }
 
-func NewPhotoLocator(srcDir string, dstDir string, logger *log.Logger) *PhotoLocator {
+func NewPhotoLocator(srcDir string, dstDir string, mode string, logger *log.Logger) *PhotoLocator {
 	photoLocator := &PhotoLocator{
 		SrcDir: srcDir,
 		DstDir: dstDir,
+		Mode:   mode,
 		Logger: logger,
 	}
 
@@ -50,9 +52,27 @@ func (e *PhotoLocator) Run(path string) error {
 			return fmt.Errorf("Create directories of '%s' : %s", photoLocation, err)
 		}
 
-		err = os.Rename(path, photoLocation)
-		if err != nil {
-			return err
+		switch e.Mode {
+		case "move":
+			err = os.Rename(path, photoLocation)
+			if err != nil {
+				return err
+			}
+		case "link":
+			err = os.Link(path, photoLocation)
+			if err != nil {
+				return err
+			}
+		case "symlink":
+			abspath, err := filepath.Abs(path)
+			if err != nil {
+				return err
+			}
+
+			err = os.Symlink(abspath, photoLocation)
+			if err != nil {
+				return err
+			}
 		}
 
 		err = removeAllEmpDir(filepath.Dir(path))

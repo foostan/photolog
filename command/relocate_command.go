@@ -24,6 +24,11 @@ var RelocateFlags = []cli.Flag{
 		Value: "warn",
 		Usage: "logger level",
 	},
+	cli.StringFlag{
+		Name:  "mode",
+		Value: "move",
+		Usage: "select mode 'move', 'link' or 'symlink'",
+	},
 }
 
 func RelocateCommand(c *cli.Context) {
@@ -36,10 +41,20 @@ func RelocateCommand(c *cli.Context) {
 	logger := log.New()
 	logger.Level = logLevel
 
+	// setup mode
+	mode := c.String("mode")
+	switch mode {
+	case "move":
+	case "symlink":
+	case "link":
+	default:
+		logger.Fatalf("Invalid mode: %s", mode)
+	}
+
 	// run command
 	srcDir := c.String("src-dir")
 	dstDir := c.String("dst-dir")
-	err = DirExec(srcDir, NewPhotoLocator(srcDir, dstDir, logger))
+	err = DirExec(srcDir, NewPhotoLocator(srcDir, dstDir, mode, logger))
 	if err != nil {
 		logger.Fatal(err)
 	}
