@@ -91,6 +91,8 @@ func (e *PhotoThumbnailer) Run(originPath string) error {
 		if err != nil {
 			return err
 		}
+
+		e.Logger.Info("made new file: " + filepath.Join(dstDirBase, fileName))
 	}
 
 	return nil

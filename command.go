@@ -28,4 +28,11 @@ var Commands = []cli.Command{
 		Flags:       command.RelocateFlags,
 		Action:      command.RelocateCommand,
 	},
+	cli.Command{
+		Name:        "thumbnail",
+		Usage:       "Generate thumbnails of photos",
+		Description: "Generate thumbnails of photos",
+		Flags:       command.ThumbnailFlags,
+		Action:      command.ThumbnailCommand,
+	},
 }
