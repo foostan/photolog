@@ -93,7 +93,7 @@ func (e *PhotoLocator) getLocation(pi *PhotoInfo) (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(e.DstDir, year, month, day, name), nil
+	return filepath.Join(e.DstDir, year, year+month, year+month+day, name), nil
 }
 
 func removeAllEmpDir(path string) error {
